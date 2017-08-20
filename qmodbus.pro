@@ -45,9 +45,14 @@ INCLUDEPATH += 3rdparty/libmodbus \
                3rdparty/qextserialport \
                src
 unix {
-    SOURCES += 3rdparty/qextserialport/posix_qextserialport.cpp	\
-           3rdparty/qextserialport/qextserialenumerator_unix.cpp
-    DEFINES += _TTY_POSIX_
+    SOURCES += 3rdparty/qextserialport/posix_qextserialport.cpp
+    macx {
+        SOURCES += 3rdparty/qextserialport/qextserialenumerator_osx.cpp
+        LIBS += -framework IOKit -framework CoreFoundation -fno-builtin
+    } else {
+        SOURCES += 3rdparty/qextserialport/qextserialenumerator_unix.cpp
+        DEFINES += _TTY_POSIX_
+    }
 }
 
 win32 {

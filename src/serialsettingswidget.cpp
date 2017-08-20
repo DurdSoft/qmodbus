@@ -31,7 +31,11 @@ int SerialSettingsWidget::setupModbusPort()
 #ifdef Q_OS_WIN
         ui->serialPort->addItem( port.friendName );
 #else
+    #ifdef Q_OS_MAC
+        ui->serialPort->addItem( port.portName );
+    #else
         ui->serialPort->addItem( port.physName );
+    #endif
 #endif
 		if( port.friendName == s.value( "serialinterface" ) )
 		{
@@ -100,7 +104,11 @@ void SerialSettingsWidget::changeSerialPort( int )
 			port = "\\\\.\\" + port;
 		}
 #else
+    #if __APPLE__
+        const QString port = ports[iface].portName;
+    #else
 		const QString port = ports[iface].physName;
+    #endif
 #endif
 
 		char parity;
